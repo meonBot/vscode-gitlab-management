@@ -6,8 +6,6 @@ export class TreecategoryProvider implements vscode.TreeDataProvider<vscode.Tree
         | undefined>();
 
     readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | undefined> = this._onDidChangeTreeData.event;
-
-    items: vscode.TreeItem[] = [];
     data: any;
     url = [{
         label: 'Favorite Repository',
@@ -37,45 +35,61 @@ export class TreecategoryProvider implements vscode.TreeDataProvider<vscode.Tree
     async getChildren(element?: vscode.TreeItem | undefined): Promise<vscode.TreeItem[]> {
 
         if (!element) {
-            let category;
-            category = new Set(['Favorite Repository', 'My Opened Pull Requests', 'My Merged Pull Requests']);
-            let container = Array.from(category).map((collection) => {
-                return new vscode.TreeItem(collection, vscode.TreeItemCollapsibleState.Expanded);
-            });
+            // let category;
+            // category = ['Favorite Repository', 'My Opened Pull Requests', 'My Merged Pull Requests'];
+            let container = [{
+                label: 'Favorite Repository',
+                collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
+            },
+            {
+                label: 'My Opened Pull Requests',
+                collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
+            },
+            {
+                label: 'My Merged Pull Requests',
+                collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
+            }];
+            // let container = Array.from(category).map((collection) => {
+            //     return new vscode.TreeItem(collection, vscode.TreeItemCollapsibleState.Expanded);
+            // });
             return container;
         } else {
             let json = await this.getData(element);
             if (element.label === this.url[0].label) {
+                let items: vscode.TreeItem[] = [];
                 json.projects.forEach((repo: any) => {
                     const item = new vscode.TreeItem(repo.path_with_namespace, vscode.TreeItemCollapsibleState.None);
 
-                    this.items.push(item);
+                    items.push(item);
                 });
-                return this.items;
+                return items;
             } else if (element.label === this.url[1].label) {
+                let items: vscode.TreeItem[] = [];
                 json.forEach((data: any) => {
                     const item = new vscode.TreeItem(data.title, vscode.TreeItemCollapsibleState.None);
 
-                    this.items.push(item);
+                    items.push(item);
                 });
-                return this.items;
+                return items;
             } else if (element.label === this.url[2].label) {
+                let items: vscode.TreeItem[] = [];
                 json.forEach((data: any) => {
                     const item = new vscode.TreeItem(data.title, vscode.TreeItemCollapsibleState.None);
 
-                    this.items.push(item);
+                    items.push(item);
                 });
-                return this.items;
+                return items;
             }
             return [];
         }
     }
 
     public setFavorite() {
+        let items = [];
         for (let i = 0; i < 5; i++) {
             const item = new vscode.TreeItem(`rwgref ${i}`, vscode.TreeItemCollapsibleState.None);
 
-            this.items.push(item);
+            items.push(item);
         }
     }
 
