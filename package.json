@@ -18,7 +18,20 @@
         "commands": [{
             "command": "extension.sayHello",
             "title": "Hello World"
-        }]
+        }],
+        "viewsContainers": {
+            "activitybar": [{
+                "id": "gitlab-management-activity-bar",
+                "title": "Gitlab Management",
+                "icon": "logo.png"
+            }]
+        },
+        "views": {
+            "gitlab-management-activity-bar": [{
+                "id": "gitlab-management",
+                "name": "Gitlab Management"
+            }]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -33,5 +46,9 @@
         "tslint": "^5.8.0",
         "@types/node": "^8.10.25",
         "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "@types/node-fetch": "^2.1.4",
+        "node-fetch": "^2.3.0"
     }
 }
