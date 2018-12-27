@@ -1,8 +1,7 @@
 import { requestDataFromApi } from "./api-call";
 
 export class GitlabSyncfusion {
-    public async getData() {
-        const url = 'https://jsonplaceholder.typicode.com/posts';
+    public static async getData(url: string) {
         let res = await requestDataFromApi(url);
         return res;
     }

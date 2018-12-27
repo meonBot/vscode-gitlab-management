@@ -3,7 +3,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { GitlabSyncfusion } from './gitlab';
-import { TreeDataProvider } from './tree-data';
+import { TreecategoryProvider } from './tree-data';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
@@ -12,17 +12,19 @@ export async function activate(context: vscode.ExtensionContext) {
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "syncfusion-gitlab-management" is now active!');
 
-    vscode.window.registerTreeDataProvider('gitlab-management', new TreeDataProvider());
+    vscode.window.registerTreeDataProvider('gitlab-management', new TreecategoryProvider());
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     let disposable = vscode.commands.registerCommand('extension.sayHello', async () => {
-        // The code you place here will be executed every time your command is executed
-        const gitlabSyncfusion: GitlabSyncfusion = new GitlabSyncfusion();
-        let json = await gitlabSyncfusion.getData();
+        const url = 'https://jsonplaceholder.typicode.com/posts';
+        let json = await GitlabSyncfusion.getData(url);
         console.log(json);
 
+        let obj = new TreecategoryProvider();
+        obj.setFavorite();
+        obj.refresh();
     });
 
     context.subscriptions.push(disposable);
