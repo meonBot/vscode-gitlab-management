@@ -1,10 +1,27 @@
 
-let openMR: any = [];
+let openMR: any = 'no_data';
+let branchArray = [{
+    branch: 'development'
+}, {
+    branch: 'master'
+}];
 
-function updateOpenMr(data: any) {
-    openMR.push(data);
+export function updateOpenMr(data: any) {
+    openMR = data.toString();
 }
 
-function checkOpenMr(data: any) {
-    return openMR.lastIndexOf(data) > -1 ? true : false;
+export function checkOpenMr(data: any): boolean {
+    return typeof openMR !== 'undefined';
+}
+
+export function getOpenMr(): any[] {
+    return openMR.toString();
+}
+
+export function setBranchArray(data: string) {
+    branchArray.push({ branch: data });
+}
+
+export function getBranchArray() {
+    return branchArray;
 }

@@ -20,6 +20,14 @@
                 "title": "Hello World"
             },
             {
+                "command": "extension.setAccessToken",
+                "title": "Set Gitlab Access Token"
+            },
+            {
+                "command": "extension.setBranch",
+                "title": "Add your current release branch"
+            },
+            {
                 "command": "extension.repoRefresh",
                 "title": "Refresh current favorite repositories",
                 "icon": {
@@ -64,7 +72,7 @@
             "activitybar": [{
                 "id": "gitlab-management-activity-bar",
                 "title": "Gitlab Management",
-                "icon": "logo.png"
+                "icon": "logo.svg"
             }]
         },
         "views": {

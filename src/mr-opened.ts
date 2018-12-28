@@ -1,7 +1,9 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+import * as dataCheck from './data-index';
 import { GitlabSyncfusion } from './gitlab';
 import { TreeData } from './repo-data';
+import { getTimers, attachTimer } from './timers';
 
 export class MrOpened implements vscode.TreeDataProvider<any> {
     onDidChangeTreeData?: vscode.Event<any> | undefined;
@@ -9,7 +11,17 @@ export class MrOpened implements vscode.TreeDataProvider<any> {
     readonly currentUser_url = 'https://gitlab.syncfusion.com/api/v4/user';
     readonly url = 'https://gitlab.syncfusion.com/api/v4/merge_requests?state=opened';
 
-    getTreeItem(element: any): vscode.TreeItem | Thenable<vscode.TreeItem> {
+    async validateToken() {
+        let data = await GitlabSyncfusion.getData('https://gitlab.syncfusion.com/api/v4/user');
+        if (data && data.message && data.message === "401 Unauthorized") {
+            vscode.window.showInformationMessage('Your token is invalid, Please set valid Access Token');
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    async getTreeItem(element: any): Promise<any> {
         if (!element.branch) {
             const treeItem = new TreeData(element.title, vscode.TreeItemCollapsibleState.None, {
                 title: '',
@@ -32,17 +44,17 @@ export class MrOpened implements vscode.TreeDataProvider<any> {
     }
 
     async getChildren(element?: any): Promise<any> {
+        let data = await GitlabSyncfusion.getData('https://gitlab.syncfusion.com/api/v4/user');
+        if (data && data.message && data.message === "401 Unauthorized") {
+            vscode.window.showInformationMessage('Your token is invalid, Please set valid Access Token');
+            return [];
+        }
         if (element) {
+            this.dataCheck();
             return await this.getOnlyFromTargetBranch(element.branch);
         }
 
-        return [{
-            branch: 'development'
-        }, {
-            branch: 'master'
-        }, {
-            branch: 'release/16.4.0.1'
-        }];
+        return dataCheck.getBranchArray();
     }
 
     async getCurrentUser() {
@@ -53,11 +65,17 @@ export class MrOpened implements vscode.TreeDataProvider<any> {
      * @todo clear hardcoded assignee id and get from current user
      */
     async getOnlyFromTargetBranch(branch: string) {
+        let timers = getTimers();
+        timers.forEach((timer) => {
+            clearInterval(timer);
+        });
         let data = await this.getData();
         let final = [];
         for (let i = 0; i < data.length; i++) {
             if (data[i].target_branch === branch) {
                 final.push(data[i]);
+                let timer = setInterval(() => vscode.window.showInformationMessage('This is MR(' + data[i].description + ') is Opened from' + data[i].updated_at + '\n Target Branch :' + data[i].target_branch + '\n Merge Status :' + data[i].merge_status + '\n Please do necessary actions'), 5000);
+                attachTimer(timer);
             }
         }
         return final;
@@ -69,4 +87,16 @@ export class MrOpened implements vscode.TreeDataProvider<any> {
         let data = await GitlabSyncfusion.getData(url);
         return data;
     }
+
+    async dataCheck() {
+        let prev = dataCheck.getOpenMr();
+        let data = await this.getData();
+        let currentData = data[0] ? data[0].id.toString() : 'no_data';
+        dataCheck.updateOpenMr(currentData);
+
+        if (currentData !== prev || (prev.toString() !== 'no_data' && dataCheck.getOpenMr().toString() === 'no_data')) {
+            vscode.window.showInformationMessage('Something changed');
+        }
+    }
+
 }

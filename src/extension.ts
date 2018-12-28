@@ -9,6 +9,8 @@ import * as path from 'path';
 import * as child_process from 'child_process';
 import { MrClosed } from './mr-closed';
 import { MrMerged } from './mr-merged';
+import { GitlabToken } from './gitlab-token';
+import { setBranchArray } from './data-index';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -52,32 +54,59 @@ export async function activate(context: vscode.ExtensionContext) {
             "Diff: b946f269", { preview: true });
     });
 
+    let setAccessToken = vscode.commands.registerCommand('extension.setAccessToken', async () => {
+        // vscode.window.registerTreeDataProvider('gitlab-management-repo', new RepositoryData());
+        // vscode.window.showInformationMessage('Refreshed Repositories');
+
+        let response = await vscode.window.showInputBox({
+            placeHolder: 'Enter your gitlab access token here',
+            password: true
+        });
+
+        if (response) {
+            GitlabToken.setToken(response);
+            vscode.window.showInformationMessage('Your gitlab token is updated');
+        }
+    });
+
+    let setBranch = vscode.commands.registerCommand('extension.setBranch', async () => {
+
+        let response = await vscode.window.showInputBox({
+            placeHolder: 'Enter your current release branch name'
+        });
+
+        if (response) {
+            setBranchArray(response);
+        }
+    });
+
     let repoRefresh = vscode.commands.registerCommand('extension.repoRefresh', async () => {
         vscode.window.registerTreeDataProvider('gitlab-management-repo', new RepositoryData());
-        vscode.window.showInformationMessage('Refreshed Repositories');
+        // vscode.window.showInformationMessage('Refreshed Repositories');
     });
 
     let mrOpened = vscode.commands.registerCommand('extension.mrOpened', async () => {
         vscode.window.registerTreeDataProvider('gitlab-management-pr-opened', new MrOpened());
-        vscode.window.showInformationMessage('Refreshed Merge Requests opened by me');
+        // vscode.window.showInformationMessage('Refreshed Merge Requests opened by me');
     });
 
     let mrAssigned = vscode.commands.registerCommand('extension.mrAssigned', async () => {
         vscode.window.registerTreeDataProvider('gitlab-management-pr-assigned', new MrAssigned());
-        vscode.window.showInformationMessage('Refreshed Merge Requests assigned to you');
+        // vscode.window.showInformationMessage('Refreshed Merge Requests assigned to you');
     });
 
     let mrMerged = vscode.commands.registerCommand('extension.mrMerged', async () => {
         vscode.window.registerTreeDataProvider('gitlab-management-pr-merged', new MrMerged());
-        vscode.window.showInformationMessage('Refreshed Merge Requests merged by you');
+        // vscode.window.showInformationMessage('Refreshed Merge Requests merged by you');
     });
 
     let mrClosed = vscode.commands.registerCommand('extension.mrClosed', async () => {
         vscode.window.registerTreeDataProvider('gitlab-management-pr-closed', new MrClosed());
-        vscode.window.showInformationMessage('Refreshed Merge Requests closed by you');
+        // vscode.window.showInformationMessage('Refreshed Merge Requests closed by you');
     });
 
-    context.subscriptions.push(disposable, repoRefresh, mrOpened, mrAssigned, mrMerged, mrClosed);
+    context.subscriptions.push(disposable, repoRefresh, mrOpened, mrAssigned, mrMerged, mrClosed, setAccessToken,
+        setBranch);
 }
 
 // this method is called when your extension is deactivated
