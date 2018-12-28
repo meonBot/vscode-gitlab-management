@@ -5,7 +5,6 @@ export class GitlabToken {
     private static context: any;
 
     static getToken() {
-        vscode.window.showInformationMessage(`Get token >> ${this.context.globalState.get('gitlab_token', {}).key}`);
         return this.context.globalState.get('gitlab_token', {}).key;
     }
 
