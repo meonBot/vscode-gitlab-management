@@ -16,9 +16,34 @@
     "main": "./out/extension",
     "contributes": {
         "commands": [{
-            "command": "extension.sayHello",
-            "title": "Hello World"
-        }],
+                "command": "extension.sayHello",
+                "title": "Hello World"
+            },
+            {
+                "command": "extension.repoRefresh",
+                "title": "Refresh current favorite repositories",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "extension.mrOpened",
+                "title": "Refresh current merge request opened by me",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "extension.mrAssigned",
+                "title": "Refresh current merge request assigned to you",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            }
+        ],
         "viewsContainers": {
             "activitybar": [{
                 "id": "gitlab-management-activity-bar",
@@ -28,9 +53,36 @@
         },
         "views": {
             "gitlab-management-activity-bar": [{
-                "id": "gitlab-management",
-                "name": "Gitlab Management"
-            }]
+                    "id": "gitlab-management-repo",
+                    "name": "Favorite Repositories"
+                },
+                {
+                    "id": "gitlab-management-pr-opened",
+                    "name": "Merge requests opened by me"
+                },
+                {
+                    "id": "gitlab-management-pr-assigned",
+                    "name": "Merge requests assigned to me"
+                }
+            ]
+        },
+        "menus": {
+            "view/title": [{
+                    "command": "extension.repoRefresh",
+                    "when": "view =~ /(gitlab-management-repo)/",
+                    "group": "navigation"
+                },
+                {
+                    "command": "extension.mrOpened",
+                    "when": "view =~ /(gitlab-management-pr-opened)/",
+                    "group": "navigation"
+                },
+                {
+                    "command": "extension.mrAssigned",
+                    "when": "view =~ /(gitlab-management-pr-assigned)/",
+                    "group": "navigation"
+                }
+            ]
         }
     },
     "scripts": {
