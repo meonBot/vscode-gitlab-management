@@ -2,15 +2,13 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { setBranchArray } from './data-index';
+import { GitlabToken } from './gitlab-token';
 import { MrAssigned } from './mr-assgined';
-import { MrOpened } from './mr-opened';
-import { RepositoryData } from './repo-data';
-import * as path from 'path';
-import * as child_process from 'child_process';
 import { MrClosed } from './mr-closed';
 import { MrMerged } from './mr-merged';
-import { GitlabToken } from './gitlab-token';
-import { setBranchArray } from './data-index';
+import { MrOpened } from './mr-opened';
+import { RepositoryData } from './repo-data';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -30,28 +28,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     let disposable = vscode.commands.registerCommand('extension.sayHello', async () => {
-        // const url = 'https://jsonplaceholder.typicode.com/posts';
-        // let json = await GitlabSyncfusion.getData(url);
-        // console.log(json);
 
-        // let obj = new RepositoryData();
-        // obj.setFavorite();
-        // obj.refresh();
-
-        let terminalPath = vscode.workspace.getConfiguration().get('terminal.integrated.shell.windows');
-        let workspace: string =
-            vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
-        let stdOutput = child_process.execSync('git show --name-only --pretty="" b946f269',
-            { cwd: workspace, shell: terminalPath as any });
-
-        let files = stdOutput.toString().split('\n');
-
-        // let fileUri =
-        //     vscode.Uri.file('E:\\development\\source\\gitlab\\Projects\\Source\\ej2-list-components\\src\\list-view\\virtualization.ts');
-
-        let fileUri = vscode.Uri.file(path.resolve(workspace + '/' + files[0]));
-        vscode.commands.executeCommand<void>('vscode.diff', toGitUri(fileUri, "b946f269~"), toGitUri(fileUri, "b946f269"),
-            "Diff: b946f269", { preview: true });
     });
 
     let setAccessToken = vscode.commands.registerCommand('extension.setAccessToken', async () => {
@@ -60,8 +37,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         let response = await vscode.window.showInputBox({
             placeHolder: 'Enter your gitlab access token here',
-            password: true,
-            value: "YeZxsZsQq8hyUCPK-Ses"
+            password: true
         });
 
         if (response) {
@@ -113,17 +89,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-}
-
-function toGitUri(uri: vscode.Uri, ref: string): vscode.Uri {
-    return uri.with({
-        scheme: 'git',
-        path: uri.path,
-        query: JSON.stringify({
-            path: uri.fsPath,
-            ref
-        })
-    });
 }
 
 export function reload() {

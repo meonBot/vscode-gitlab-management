@@ -74,7 +74,7 @@ export class MrOpened implements vscode.TreeDataProvider<any> {
         for (let i = 0; i < data.length; i++) {
             if (data[i].target_branch === branch) {
                 final.push(data[i]);
-                let timer = setInterval(() => vscode.window.showInformationMessage('This is MR(' + data[i].description + ') is Opened from' + data[i].updated_at + '\n Target Branch :' + data[i].target_branch + '\n Merge Status :' + data[i].merge_status + '\n Please do necessary actions'), 5000);
+                let timer = setInterval(() => vscode.window.showInformationMessage('MR(' + data[i].description + ') is Opened from' + data[i].updated_at + '\n Target Branch :' + data[i].target_branch + '\n Merge Status :' + data[i].merge_status + '\n Please do necessary actions'), 900000);
                 attachTimer(timer);
             }
         }

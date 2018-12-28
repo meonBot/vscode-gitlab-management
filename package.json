@@ -2,8 +2,8 @@
     "name": "syncfusion-gitlab-management",
     "displayName": "syncfusion-gitlab-management",
     "description": "",
-    "version": "0.0.1",
-    "publisher": "mohan",
+    "version": "0.0.2",
+    "publisher": "mohandeblaze",
     "engines": {
         "vscode": "^1.30.0"
     },
@@ -21,11 +21,11 @@
             },
             {
                 "command": "extension.setAccessToken",
-                "title": "Set Gitlab Access Token"
+                "title": "Gitlab: Set Gitlab Access Token"
             },
             {
                 "command": "extension.setBranch",
-                "title": "Add your current release branch"
+                "title": "Gitlab: Add your current release branch"
             },
             {
                 "command": "extension.repoRefresh",
@@ -134,6 +134,10 @@
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
+    "repository": {
+        "url": "https://github.com/mohandeblaze/syncfusion-hackathon-2018.git"
+    },
+    "icon": "logo.png",
     "devDependencies": {
         "typescript": "^2.6.1",
         "vscode": "^1.1.21",
