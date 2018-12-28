@@ -4,7 +4,7 @@
 import * as vscode from 'vscode';
 import { setBranchArray } from './data-index';
 import { GitlabToken } from './gitlab-token';
-import { MrAssigned } from './mr-assgined';
+import { MrAssigned } from './mr-assigned';
 import { MrClosed } from './mr-closed';
 import { MrMerged } from './mr-merged';
 import { MrOpened } from './mr-opened';
@@ -17,6 +17,8 @@ export async function activate(context: vscode.ExtensionContext) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "syncfusion-gitlab-management" is now active!');
+
+    GitlabToken.setContext(context);
 
     reload();
 

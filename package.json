@@ -2,7 +2,7 @@
     "name": "syncfusion-gitlab-management",
     "displayName": "syncfusion-gitlab-management",
     "description": "",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "publisher": "mohandeblaze",
     "engines": {
         "vscode": "^1.30.0"

@@ -2,14 +2,15 @@ import { GitlabSyncfusion } from "./gitlab";
 import * as vscode from 'vscode';
 import { reload } from './extension';
 export class GitlabToken {
-    private static token: string;
+    private static context: any;
 
     static getToken() {
-        return this.token;
+        vscode.window.showInformationMessage(`Get token >> ${this.context.globalState.get('gitlab_token', {}).key}`);
+        return this.context.globalState.get('gitlab_token', {}).key;
     }
 
     static setToken(data: string) {
-        this.token = data;
+        this.context.globalState.update('gitlab_token', { key: data });
         reload();
     }
 
@@ -21,5 +22,9 @@ export class GitlabToken {
         } else {
             return true;
         }
+    }
+
+    static setContext(context: vscode.ExtensionContext) {
+        this.context = context;
     }
 }
