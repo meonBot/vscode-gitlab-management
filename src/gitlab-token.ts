@@ -1,6 +1,6 @@
 import { GitlabSyncfusion } from "./gitlab";
 import * as vscode from 'vscode';
-
+import { reload } from './extension';
 export class GitlabToken {
     private static token: string;
 
@@ -10,6 +10,7 @@ export class GitlabToken {
 
     static setToken(data: string) {
         this.token = data;
+        reload();
     }
 
     static async validateToken(): Promise<boolean> {

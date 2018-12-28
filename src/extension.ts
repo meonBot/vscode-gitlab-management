@@ -20,11 +20,11 @@ export async function activate(context: vscode.ExtensionContext) {
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "syncfusion-gitlab-management" is now active!');
 
-    vscode.window.registerTreeDataProvider('gitlab-management-repo', new RepositoryData());
-    vscode.window.registerTreeDataProvider('gitlab-management-pr-opened', new MrOpened());
-    vscode.window.registerTreeDataProvider('gitlab-management-pr-assigned', new MrAssigned());
-    vscode.window.registerTreeDataProvider('gitlab-management-pr-merged', new MrMerged());
-    vscode.window.registerTreeDataProvider('gitlab-management-pr-closed', new MrClosed());
+    reload();
+
+    setInterval(() => {
+        reload();
+    }, 50000);
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
@@ -60,7 +60,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
         let response = await vscode.window.showInputBox({
             placeHolder: 'Enter your gitlab access token here',
-            password: true
+            password: true,
+            value: "YeZxsZsQq8hyUCPK-Ses"
         });
 
         if (response) {
@@ -72,7 +73,8 @@ export async function activate(context: vscode.ExtensionContext) {
     let setBranch = vscode.commands.registerCommand('extension.setBranch', async () => {
 
         let response = await vscode.window.showInputBox({
-            placeHolder: 'Enter your current release branch name'
+            placeHolder: 'Enter your current release branch name',
+            value: 'release/16.4.0.1'
         });
 
         if (response) {
@@ -122,4 +124,12 @@ function toGitUri(uri: vscode.Uri, ref: string): vscode.Uri {
             ref
         })
     });
+}
+
+export function reload() {
+    vscode.window.registerTreeDataProvider('gitlab-management-repo', new RepositoryData());
+    vscode.window.registerTreeDataProvider('gitlab-management-pr-opened', new MrOpened());
+    vscode.window.registerTreeDataProvider('gitlab-management-pr-assigned', new MrAssigned());
+    vscode.window.registerTreeDataProvider('gitlab-management-pr-merged', new MrMerged());
+    vscode.window.registerTreeDataProvider('gitlab-management-pr-closed', new MrClosed());
 }
