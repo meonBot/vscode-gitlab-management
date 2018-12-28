@@ -3,11 +3,12 @@ import * as vscode from 'vscode';
 import { GitlabSyncfusion } from './gitlab';
 import { TreeData } from './repo-data';
 
-export class MrAssigned implements vscode.TreeDataProvider<any> {
+export class MrMerged implements vscode.TreeDataProvider<any> {
     onDidChangeTreeData?: vscode.Event<any> | undefined;
 
     readonly currentUser_url = 'https://gitlab.syncfusion.com/api/v4/user';
-    readonly url = 'https://gitlab.syncfusion.com/api/v4/merge_requests?state=opened&assignee_id={{id}}';
+    // Currently there will be no opened pull request in my profile, for demo sake requesting merged MRs by me
+    readonly url = 'https://gitlab.syncfusion.com/api/v4/merge_requests?state=merged';
 
     getTreeItem(element: any): vscode.TreeItem | Thenable<vscode.TreeItem> {
         if (!element.branch) {

@@ -94,7 +94,7 @@ export class RepositoryData implements vscode.TreeDataProvider<vscode.TreeItem> 
                 let take15 = [];
                 for (let i = 0; i < 15; i++) {
                     if (data[i]) {
-                        data[i].data = (element as any).data
+                        data[i].data = (element as any).data;
                         data[i].syncId = 'repo-branch';
                         data[i].commit_url = (element as any).repo_details.web_url + '/commit/' + data[i].id
                         take15.push(data[i]);

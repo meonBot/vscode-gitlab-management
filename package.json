@@ -29,7 +29,7 @@
             },
             {
                 "command": "extension.mrOpened",
-                "title": "Refresh current merge request opened by me",
+                "title": "Refresh current merge requests opened by me",
                 "icon": {
                     "light": "resources/light/refresh.svg",
                     "dark": "resources/dark/refresh.svg"
@@ -37,7 +37,23 @@
             },
             {
                 "command": "extension.mrAssigned",
-                "title": "Refresh current merge request assigned to you",
+                "title": "Refresh current merge requests assigned to you",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "extension.mrMerged",
+                "title": "Refresh current merge requests merged by you",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "extension.mrClosed",
+                "title": "Refresh current merge requests closed by you",
                 "icon": {
                     "light": "resources/light/refresh.svg",
                     "dark": "resources/dark/refresh.svg"
@@ -54,7 +70,7 @@
         "views": {
             "gitlab-management-activity-bar": [{
                     "id": "gitlab-management-repo",
-                    "name": "Favorite Repositories"
+                    "name": "My Starred Repositories"
                 },
                 {
                     "id": "gitlab-management-pr-opened",
@@ -63,6 +79,14 @@
                 {
                     "id": "gitlab-management-pr-assigned",
                     "name": "Merge requests assigned to me"
+                },
+                {
+                    "id": "gitlab-management-pr-merged",
+                    "name": "Merge requests Merged by me"
+                },
+                {
+                    "id": "gitlab-management-pr-closed",
+                    "name": "Closed Merge requests by me"
                 }
             ]
         },
@@ -80,6 +104,16 @@
                 {
                     "command": "extension.mrAssigned",
                     "when": "view =~ /(gitlab-management-pr-assigned)/",
+                    "group": "navigation"
+                },
+                {
+                    "command": "extension.mrMerged",
+                    "when": "view =~ /(gitlab-management-pr-merged)/",
+                    "group": "navigation"
+                },
+                {
+                    "command": "extension.mrClosed",
+                    "when": "view =~ /(gitlab-management-pr-closed)/",
                     "group": "navigation"
                 }
             ]

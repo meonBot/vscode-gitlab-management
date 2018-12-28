@@ -1,29 +1,72 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
 import { GitlabSyncfusion } from './gitlab';
 import { TreeData } from './repo-data';
-import * as path from 'path';
 
 export class MrOpened implements vscode.TreeDataProvider<any> {
     onDidChangeTreeData?: vscode.Event<any> | undefined;
 
-    url = 'https://gitlab.syncfusion.com/api/v4/merge_requests?state=opened';
+    readonly currentUser_url = 'https://gitlab.syncfusion.com/api/v4/user';
+    readonly url = 'https://gitlab.syncfusion.com/api/v4/merge_requests?state=opened';
 
     getTreeItem(element: any): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        const treeItem = new TreeData(element.title, vscode.TreeItemCollapsibleState.None, {
-            title: '',
-            command: 'vscode.open',
-            arguments: [vscode.Uri.parse(element.web_url)],
-            tooltip: ''
-        });
+        if (!element.branch) {
+            const treeItem = new TreeData(element.title, vscode.TreeItemCollapsibleState.None, {
+                title: '',
+                command: 'vscode.open',
+                arguments: [vscode.Uri.parse(element.web_url)],
+                tooltip: ''
+            });
+            treeItem.iconPath = {
+                dark: path.join(path.resolve(__dirname, '../resources/dark'), 'icon-git.svg'),
+                light: path.join(path.resolve(__dirname, '../resources/light'), 'icon-git.svg')
+            };
+            return treeItem;
+        }
+        let treeItem = new TreeData(element.branch, vscode.TreeItemCollapsibleState.Collapsed);
         treeItem.iconPath = {
-            dark: path.join(path.resolve(__dirname, '../resources/dark'), 'icon-git.svg'),
-            light: path.join(path.resolve(__dirname, '../resources/light'), 'icon-git.svg')
+            dark: path.join(path.resolve(__dirname, '../resources/dark'), 'icon-branch.svg'),
+            light: path.join(path.resolve(__dirname, '../resources/light'), 'icon-branch.svg')
         };
         return treeItem;
     }
 
     async getChildren(element?: any): Promise<any> {
-        let json = await GitlabSyncfusion.getData(this.url);
-        return json;
+        if (element) {
+            return await this.getOnlyFromTargetBranch(element.branch);
+        }
+
+        return [{
+            branch: 'development'
+        }, {
+            branch: 'master'
+        }, {
+            branch: 'release/16.4.0.1'
+        }];
+    }
+
+    async getCurrentUser() {
+        return await GitlabSyncfusion.getData(this.currentUser_url);
+    }
+
+    /**
+     * @todo clear hardcoded assignee id and get from current user
+     */
+    async getOnlyFromTargetBranch(branch: string) {
+        let data = await this.getData();
+        let final = [];
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].target_branch === branch) {
+                final.push(data[i]);
+            }
+        }
+        return final;
+    }
+
+    async getData() {
+        let currentUser = await this.getCurrentUser();
+        let url = this.url.replace('{{id}}', currentUser.id);
+        let data = await GitlabSyncfusion.getData(url);
+        return data;
     }
 }
