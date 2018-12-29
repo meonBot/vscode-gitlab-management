@@ -22,7 +22,7 @@ export class RepositoryData implements vscode.TreeDataProvider<vscode.TreeItem> 
     async validateToken() {
         let data = await GitlabSyncfusion.getData('https://gitlab.syncfusion.com/api/v4/user');
         if (data && data.message && data.message === "401 Unauthorized") {
-            vscode.window.showInformationMessage('Your token is invalid, Please set valid Access Token');
+            vscode.window.showInformationMessage('Your token is invalid, Please set valid gitlab access token');
             return false;
         } else {
             return true;
@@ -36,9 +36,15 @@ export class RepositoryData implements vscode.TreeDataProvider<vscode.TreeItem> 
 
     async getChildren(element?: vscode.TreeItem | undefined): Promise<any> {
         let data = await GitlabSyncfusion.getData('https://gitlab.syncfusion.com/api/v4/user');
-        if (data && data.message && data.message === "401 Unauthorized") {
-            vscode.window.showInformationMessage('Your token is invalid, Please set valid Access Token');
-            return [];
+        if (data) {
+            if (data.message) {
+                vscode.window.showInformationMessage(`${data.message}, invalid token. Please set valid gitlab access token`);
+                return [];
+            }
+            if(data.error) {
+                vscode.window.showInformationMessage(data.error_description);
+                return [];
+            }
         }
         let json = await this.getData(this.url[0]);
         if (element) {

@@ -10,16 +10,6 @@ export class MrAssigned implements vscode.TreeDataProvider<any> {
     readonly currentUser_url = 'https://gitlab.syncfusion.com/api/v4/user';
     readonly url = 'https://gitlab.syncfusion.com/api/v4/merge_requests?state=opened&assignee_id={{id}}';
 
-    async validateToken() {
-        let data = await GitlabSyncfusion.getData('https://gitlab.syncfusion.com/api/v4/user');
-        if (data && data.message && data.message === "401 Unauthorized") {
-            vscode.window.showInformationMessage('Your token is invalid, Please set valid Access Token');
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     getTreeItem(element: any): vscode.TreeItem | Thenable<vscode.TreeItem> {
         if (!element.branch) {
             const treeItem = new TreeData(element.title, vscode.TreeItemCollapsibleState.None, {
@@ -44,9 +34,15 @@ export class MrAssigned implements vscode.TreeDataProvider<any> {
 
     async getChildren(element?: any): Promise<any> {
         let data = await GitlabSyncfusion.getData('https://gitlab.syncfusion.com/api/v4/user');
-        if (data && data.message && data.message === "401 Unauthorized") {
-            vscode.window.showInformationMessage('Your token is invalid, Please set valid Access Token');
-            return [];
+        if (data) {
+            if (data.message) {
+                vscode.window.showInformationMessage(`${data.message}, invalid token. Please set valid gitlab access token`);
+                return [];
+            }
+            if(data.error) {
+                vscode.window.showInformationMessage(data.error_description);
+                return [];
+            }
         }
         if (element) {
             return await this.getOnlyFromTargetBranch(element.branch);

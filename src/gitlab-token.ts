@@ -16,7 +16,7 @@ export class GitlabToken {
     static async validateToken(): Promise<boolean> {
         let data = await GitlabSyncfusion.getData('https://gitlab.syncfusion.com/api/v4/user');
         if (data && data.message && data.message === "401 Unauthorized") {
-            vscode.window.showInformationMessage('Your token is invalid, Please set valid Access Token');
+            vscode.window.showInformationMessage('Your token is invalid, Please set valid gitlab access token');
             return false;
         } else {
             return true;

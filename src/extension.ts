@@ -26,17 +26,7 @@ export async function activate(context: vscode.ExtensionContext) {
         reload();
     }, 50000);
 
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.sayHello', async () => {
-
-    });
-
     let setAccessToken = vscode.commands.registerCommand('extension.setAccessToken', async () => {
-        // vscode.window.registerTreeDataProvider('gitlab-management-repo', new RepositoryData());
-        // vscode.window.showInformationMessage('Refreshed Repositories');
-
         let response = await vscode.window.showInputBox({
             placeHolder: 'Enter your gitlab access token here',
             password: true
@@ -85,7 +75,7 @@ export async function activate(context: vscode.ExtensionContext) {
         // vscode.window.showInformationMessage('Refreshed Merge Requests closed by you');
     });
 
-    context.subscriptions.push(disposable, repoRefresh, mrOpened, mrAssigned, mrMerged, mrClosed, setAccessToken,
+    context.subscriptions.push(repoRefresh, mrOpened, mrAssigned, mrMerged, mrClosed, setAccessToken,
         setBranch);
 }
 
