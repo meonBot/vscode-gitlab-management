@@ -1,1 +1,1 @@
-# syncfusion-gitlab-management
+# Vscode-gitlab-management
