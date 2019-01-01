@@ -1,6 +1,6 @@
 {
-    "name": "syncfusion-gitlab-management",
-    "displayName": "syncfusion-gitlab-management",
+    "name": "vscode-gitlab-management",
+    "displayName": "vscode-gitlab-management",
     "description": "",
     "version": "0.0.3",
     "publisher": "mohandeblaze",
@@ -131,7 +131,7 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "repository": {
-        "url": "https://github.com/mohandeblaze/syncfusion-hackathon-2018.git"
+        "url": "https://github.com/mohandeblaze/vscode-gitlab-management.git"
     },
     "icon": "logo.png",
     "devDependencies": {
