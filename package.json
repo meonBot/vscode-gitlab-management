@@ -138,7 +138,6 @@
 
     },
     "dependencies": {
-        "@types/node-fetch": "^2.1.4",
-        "node-fetch": "^2.6.7"
+
     }
 }
