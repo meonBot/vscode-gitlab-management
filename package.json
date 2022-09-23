@@ -136,8 +136,6 @@
     "icon": "logo.png",
     "devDependencies": {
 
-
-        "@types/mocha": "^2.2.42"
     },
     "dependencies": {
         "@types/node-fetch": "^2.1.4",
